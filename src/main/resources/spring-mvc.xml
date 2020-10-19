@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:mvc="http://www.springframework.org/schema/mvc"
+       xsi:schemaLocation="
+       http://www.springframework.org/schema/beans
+       http://www.springframework.org/schema/beans/spring-beans.xsd
+       http://www.springframework.org/schema/context
+       http://www.springframework.org/schema/context/spring-context.xsd
+       http://www.springframework.org/schema/mvc
+       http://www.springframework.org/schema/mvc/spring-mvc.xsd">
+
+
+    <!-- 扫描注解，这样com.yu包下的文件都能被扫描 -->
+    <context:component-scan base-package="com.yu"/>
+
+    <!-- 开启SpringMVC注解模式 -->
+    <mvc:annotation-driven/>
+
+    <!--  防止静态资源文件被spring MVC拦截-->
+    <mvc:resources location="/bootstrap/" mapping="/bootstrap/**"/>
+    <mvc:resources location="/css/" mapping="/css/**"/>
+    <mvc:resources location="/js/" mapping="/js/**"/>
+    <mvc:resources location="/dist/" mapping="/dist/**"/>
+    <mvc:resources location="/font_Icon/" mapping="/font_Icon/**"/>
+    <mvc:resources location="/img/" mapping="/img/**"/>
+    <mvc:resources location="/plugins/" mapping="/plugins/**"/>
+    <mvc:resources location="/layer/" mapping="/layer/**"/>
+    <!--静态资源全部放行-->
+    <!--    <mvc:default-servlet-handler></mvc:default-servlet-handler>-->
+    <!-- 静态资源默认servlet配置 -->
+    <mvc:default-servlet-handler/>
+
+    <!-- 配置返回视图的路径，以及识别后缀是jsp文件 -->
+    <bean class="org.springframework.web.servlet.view.InternalResourceViewResolver">
+        <property name="viewClass" value="org.springframework.web.servlet.view.JstlView"/>
+        <property name="prefix" value="/WEB-INF/pages/"/>
+        <property name="suffix" value=".jsp"/>
+    </bean>
+
+    <!--拦截器（用户未登录拦截访问路径）-->
+    <mvc:interceptors>
+        <mvc:interceptor>
+            <mvc:mapping path="/**"/>
+            <!--如果拦截了静态资源，需要配置放行-->
+            <mvc:exclude-mapping path="/bootstrap/*"></mvc:exclude-mapping>
+            <mvc:exclude-mapping path="/css/*"></mvc:exclude-mapping>
+            <mvc:exclude-mapping path="/js/*"></mvc:exclude-mapping>
+            <mvc:exclude-mapping path="/dist/*"></mvc:exclude-mapping>
+            <mvc:exclude-mapping path="/font_Icon/*"></mvc:exclude-mapping>
+            <mvc:exclude-mapping path="/img/*"></mvc:exclude-mapping>
+            <mvc:exclude-mapping path="/layer/*"></mvc:exclude-mapping>
+            <mvc:exclude-mapping path="/plugins/*"></mvc:exclude-mapping>
+            <mvc:exclude-mapping path="/login/*"></mvc:exclude-mapping>
+            <mvc:exclude-mapping path="/test/*"></mvc:exclude-mapping>
+
+            <bean class="com.yu.interceptor.LoginInterceptor"></bean>
+        </mvc:interceptor>
+    </mvc:interceptors>
+
+<!--    <bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">-->
+<!--        <property name="plugins">-->
+<!--            <array>-->
+<!--                <bean class="com.github.pagehelper.PageInterceptor">-->
+<!--                    <property name="properties"> &lt;!&ndash;使用下面的方式配置参数，一行配置一个 &ndash;&gt;-->
+<!--                        <value>params=value1</value>-->
+<!--                    </property>-->
+<!--                </bean>-->
+<!--            </array>-->
+<!--        </property>-->
+<!--    </bean>-->
+
+</beans>

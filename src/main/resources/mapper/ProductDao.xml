@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!-- 设置为IUserDao接口方法提供sql语句配置 -->
+<mapper namespace="com.yu.dao.IProductDao">
+    <!--这里的id是指接口中的方法名-->
+    <select id="findProduct" resultType="com.yu.model.Product">
+        SELECT * FROM product
+    </select>
+
+    <!--产品的新增-->
+    <insert id="savePro" parameterType="com.yu.model.Product">
+        insert into `product` (productNum,productName,cityName,DepartureTime,productPrice,productDesc,productStatus) values (#{productNum},#{productName},#{cityName},#{departureTime},#{productPrice},#{productDesc},#{productStatus});
+    </insert>
+
+    <!--产品的删除-->
+    <delete id="delProById" parameterType="java.lang.String">
+        delete  from  product where id in
+        <foreach item="ids" collection="array" index="no" open="(" separator="," close=")">
+            #{ids}
+        </foreach>
+    </delete>
+</mapper>
