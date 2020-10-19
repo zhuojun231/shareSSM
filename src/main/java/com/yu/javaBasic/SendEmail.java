@@ -11,7 +11,6 @@ import javax.mail.internet.*;
 
 public class SendEmail {
     public static void main(String[] args) throws Exception {
-
         //邮件标题
         String subjectTitle = "测试邮件含附件";
         //邮件内容
